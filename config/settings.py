@@ -22,14 +22,23 @@ class Settings(BaseSettings):
     # Application
     # -------------------------------------------------
 
-    app_name: str = "AI Trading System"
+    app_name: str = "QuantNova"
     app_version: str = "1.0.0"
+
+    # -------------------------------------------------
+    # Branding
+    # -------------------------------------------------
+
+    ai_name: str = "QuantNova"
+    ai_tagline: str = "Advanced AI Trading Intelligence Platform"
+    ai_developer: str = "Rubais Ghouri"
+    ai_company: str = "DevSpark Creations"
 
     # -------------------------------------------------
     # AI Providers
     # -------------------------------------------------
 
-    default_llm: str = "gemini"
+    default_llm: str = "ollama"
 
     gemini_api_key: str = ""
     openai_api_key: str = ""

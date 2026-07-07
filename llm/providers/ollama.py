@@ -4,9 +4,9 @@ Ollama LLM Provider.
 
 from ollama import Client
 
-from config.settings import settings
 from llm.base import BaseLLM
 from llm.response import LLMResponse
+from prompts.manager import PromptManager
 
 
 class OllamaLLM(BaseLLM):
@@ -27,23 +27,27 @@ class OllamaLLM(BaseLLM):
         prompt: str,
         system_prompt: str | None = None,
     ) -> LLMResponse:
+        """
+        Generate a response using Ollama.
+        """
 
-        messages = []
+        # Build prompts using the Prompt Manager
+        default_system_prompt, user_prompt = PromptManager.build(prompt)
 
-        if system_prompt:
-            messages.append(
-                {
-                    "role": "system",
-                    "content": system_prompt,
-                }
-            )
+        # If caller provides a custom system prompt,
+        # use it instead of the default QuantNova prompt.
+        final_system_prompt = system_prompt or default_system_prompt
 
-        messages.append(
+        messages = [
+            {
+                "role": "system",
+                "content": final_system_prompt,
+            },
             {
                 "role": "user",
-                "content": prompt,
-            }
-        )
+                "content": user_prompt,
+            },
+        ]
 
         response = self.client.chat(
             model=self.model,
