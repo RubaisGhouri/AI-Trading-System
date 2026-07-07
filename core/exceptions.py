@@ -1,44 +1,111 @@
 """
-Custom exceptions for the AI Trading System.
-
-Instead of raising generic exceptions, use these
-custom exceptions throughout the project.
+Custom exceptions used throughout QuantNova.
 """
 
 
-class TradingSystemError(Exception):
+class QuantNovaError(Exception):
     """
-    Base exception for the AI Trading System.
-    All custom exceptions should inherit from this class.
+    Base exception for the application.
     """
+
     pass
 
 
-class ConfigurationError(TradingSystemError):
-    """Raised when configuration is invalid."""
+# =====================================================
+# Configuration
+# =====================================================
+
+class ConfigurationError(QuantNovaError):
+    """
+    Invalid or missing configuration.
+    """
+
     pass
 
 
-class LLMError(TradingSystemError):
-    """Raised when an LLM provider fails."""
+# =====================================================
+# LLM
+# =====================================================
+
+class LLMError(QuantNovaError):
+    """
+    Base LLM exception.
+    """
+
     pass
 
 
-class ExchangeError(TradingSystemError):
-    """Raised when exchange operations fail."""
+class ProviderNotAvailableError(LLMError):
+    """
+    Provider is unavailable.
+    """
+
     pass
 
 
-class StrategyError(TradingSystemError):
-    """Raised when a trading strategy fails."""
+class InvalidAPIKeyError(LLMError):
+    """
+    Invalid API key.
+    """
+
     pass
 
 
-class DataError(TradingSystemError):
-    """Raised when market data is invalid or unavailable."""
+# =====================================================
+# Exchange
+# =====================================================
+
+class ExchangeError(QuantNovaError):
+    """
+    Base exchange exception.
+    """
+
     pass
 
 
-class APIError(TradingSystemError):
-    """Raised when an external API request fails."""
+class ExchangeConnectionError(ExchangeError):
+    """
+    Unable to connect.
+    """
+
+    pass
+
+
+class InvalidSymbolError(ExchangeError):
+    """
+    Invalid trading symbol.
+    """
+
+    pass
+
+
+class RateLimitError(ExchangeError):
+    """
+    API rate limit exceeded.
+    """
+
+    pass
+
+
+# =====================================================
+# Strategy
+# =====================================================
+
+class StrategyError(QuantNovaError):
+    """
+    Strategy failure.
+    """
+
+    pass
+
+
+# =====================================================
+# Risk
+# =====================================================
+
+class RiskManagementError(QuantNovaError):
+    """
+    Risk calculation failed.
+    """
+
     pass

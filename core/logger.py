@@ -1,23 +1,45 @@
 """
-Central logging configuration for the AI Trading System.
+Central logger.
 """
 
 import logging
+from pathlib import Path
 
-from core.constants import LOG_FORMAT, LOG_LEVEL
-from core.paths import LOGS_DIR
-
-# Main log file
-LOG_FILE = LOGS_DIR / "system.log"
-
-# Configure logger
-logging.basicConfig(
-    level=getattr(logging, LOG_LEVEL),
-    format=LOG_FORMAT,
-    handlers=[
-        logging.FileHandler(LOG_FILE, encoding="utf-8"),
-        logging.StreamHandler()
-    ]
+from config.settings import settings
+from core.logging_config import (
+    LOG_FORMAT,
+    DATE_FORMAT,
 )
 
-logger = logging.getLogger("AI-Trading-System")
+LOG_DIR = Path("logs")
+LOG_DIR.mkdir(exist_ok=True)
+
+LOG_FILE = LOG_DIR / "quantnova.log"
+
+logger = logging.getLogger(settings.app_name)
+
+logger.setLevel(getattr(logging, settings.log_level))
+
+formatter = logging.Formatter(
+    LOG_FORMAT,
+    datefmt=DATE_FORMAT,
+)
+
+file_handler = logging.FileHandler(
+    LOG_FILE,
+    encoding="utf-8",
+)
+
+file_handler.setFormatter(formatter)
+
+console_handler = logging.StreamHandler()
+
+console_handler.setFormatter(formatter)
+
+logger.handlers.clear()
+
+logger.addHandler(file_handler)
+
+logger.addHandler(console_handler)
+
+logger.propagate = False
