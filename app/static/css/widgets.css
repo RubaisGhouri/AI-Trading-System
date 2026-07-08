@@ -157,3 +157,23 @@
     font-size:14px;
 
 }
+
+.scanner-row{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr auto;
+
+    padding:14px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    align-items:center;
+
+}
+
+.scanner-row:last-child{
+
+    border:none;
+
+}

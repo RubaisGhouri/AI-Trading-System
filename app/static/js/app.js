@@ -224,3 +224,133 @@ async function sendMessage() {
     }
 
 }
+
+async function loadSignal() {
+
+    const response = await fetch("/api/signal");
+
+    const signal = await response.json();
+
+    const div = document.getElementById("signal-card");
+
+    if (!div) return;
+
+    const color =
+        signal.signal === "BUY"
+            ? "#12d6a2"
+            : signal.signal === "SELL"
+            ? "#ff5c5c"
+            : "#ffc857";
+
+    div.innerHTML = `
+
+        <h1 style="color:${color};">
+
+            ${signal.signal}
+
+        </h1>
+
+        <p>
+
+            Confidence
+
+            <b>${signal.confidence}%</b>
+
+        </p>
+
+        <p>
+
+            Entry
+
+            <b>${signal.entry}</b>
+
+        </p>
+
+        <p>
+
+            Stop
+
+            <b>${signal.stop_loss}</b>
+
+        </p>
+
+        <p>
+
+            Target
+
+            <b>${signal.take_profit}</b>
+
+        </p>
+
+    `;
+}
+
+loadSignal();
+
+setInterval(loadSignal, 15000);
+
+async function loadScanner() {
+
+    try {
+
+        const response = await fetch("/api/opportunities");
+
+        const data = await response.json();
+
+        const container = document.getElementById("scanner-list");
+
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        data.forEach((coin) => {
+
+            let color = "#ffc857";
+
+            if (coin.signal === "BUY")
+                color = "#12d6a2";
+
+            if (coin.signal === "SELL")
+                color = "#ff5b5b";
+
+            container.innerHTML += `
+
+                <div class="scanner-row">
+
+                    <div>
+
+                        <strong>${coin.coin}</strong>
+
+                    </div>
+
+                    <div style="color:${color};font-weight:700;">
+
+                        ${coin.signal}
+
+                    </div>
+
+                    <div>
+
+                        ${coin.confidence}%
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+    }
+
+}
+
+loadScanner();
+
+setInterval(loadScanner,15000);
