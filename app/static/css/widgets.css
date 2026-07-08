@@ -1,0 +1,69 @@
+.widget{
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:20px;
+
+    padding:25px;
+
+    min-height:240px;
+
+    backdrop-filter:blur(16px);
+
+    transition:.3s;
+
+}
+
+.widget:hover{
+
+    transform:translateY(-6px);
+
+    border-color:#12d6a2;
+
+    box-shadow:0 20px 40px rgba(18,214,162,.15);
+
+}
+
+.widget h3{
+
+    margin-bottom:18px;
+
+}
+
+.ai-panel{
+
+    margin-top:30px;
+
+    background:rgba(255,255,255,.04);
+
+    border-radius:22px;
+
+    padding:25px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+}
+
+.ai-panel textarea{
+
+    width:100%;
+
+    height:170px;
+
+    margin:20px 0;
+
+    background:#111827;
+
+    border:none;
+
+    border-radius:14px;
+
+    padding:20px;
+
+    color:white;
+
+    resize:none;
+
+}

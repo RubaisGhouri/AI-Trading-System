@@ -1,0 +1,63 @@
+.sidebar{
+
+    position:sticky;
+
+    top:0;
+
+    height:100vh;
+
+    padding:30px;
+
+    background:#0b1220;
+
+    border-right:1px solid rgba(255,255,255,.08);
+
+}
+
+.logo{
+
+    margin-bottom:55px;
+
+}
+
+.logo h2{
+
+    font-size:34px;
+
+}
+
+.logo span{
+
+    color:#7d8798;
+
+}
+
+.sidebar nav{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+.sidebar nav a{
+
+    padding:15px 18px;
+
+    border-radius:12px;
+
+    color:#cfd5e3;
+
+    transition:.3s;
+
+}
+
+.sidebar nav a:hover{
+
+    background:#12d6a222;
+
+    color:#12d6a2;
+
+}

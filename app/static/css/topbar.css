@@ -1,0 +1,23 @@
+.topbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+.topbar h2{
+
+    font-size:34px;
+
+}
+
+.topbar p{
+
+    color:#8892a6;
+
+}

@@ -1,0 +1,229 @@
+.bg-blur{
+
+    position:fixed;
+
+    border-radius:50%;
+
+    filter:blur(120px);
+
+    z-index:-1;
+
+    animation:float 14s ease-in-out infinite;
+
+}
+
+.blur1{
+
+    width:420px;
+
+    height:420px;
+
+    background:#00e68a22;
+
+    top:180px;
+
+    right:-100px;
+
+}
+
+.blur2{
+
+    width:350px;
+
+    height:350px;
+
+    background:#7c3aed22;
+
+    left:-120px;
+
+    bottom:120px;
+
+    animation-delay:3s;
+
+}
+
+.status-section{
+
+    padding:100px 0;
+
+}
+
+.section-title{
+
+    text-align:center;
+
+    font-size:42px;
+
+    margin-bottom:60px;
+
+    font-family:"Space Grotesk",sans-serif;
+
+}
+
+.status-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+
+    gap:25px;
+
+}
+
+.status-card{
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:20px;
+
+    padding:35px;
+
+    backdrop-filter:blur(18px);
+
+    transition:.35s;
+
+    text-align:center;
+
+}
+
+.status-card:hover{
+
+    transform:translateY(-8px);
+
+    border-color:var(--primary);
+
+    box-shadow:0 20px 40px rgba(0,230,138,.18);
+
+}
+
+.status-icon{
+
+    font-size:45px;
+
+    margin-bottom:20px;
+
+}
+
+.status-card h3{
+
+    margin-bottom:10px;
+
+}
+
+.status-card p{
+
+    color:var(--muted);
+
+}
+
+.coming-section{
+
+    padding:100px 0;
+
+    text-align:center;
+
+}
+
+.coming-section h2{
+
+    font-size:42px;
+
+    margin-bottom:15px;
+
+}
+
+.coming-section p{
+
+    color:var(--muted);
+
+    font-size:18px;
+
+}
+
+/* ===========================
+   Live Market Cards
+=========================== */
+
+.market-section{
+
+    padding:120px 0;
+
+}
+
+.market-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+    gap:25px;
+
+}
+
+.market-card{
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:20px;
+
+    padding:30px;
+
+    backdrop-filter:blur(18px);
+
+    transition:.35s;
+
+}
+
+.market-card:hover{
+
+    transform:translateY(-8px);
+
+    border-color:var(--primary);
+
+    box-shadow:0 20px 40px rgba(0,230,138,.18);
+
+}
+
+.market-symbol{
+
+    font-size:28px;
+
+    font-weight:700;
+
+    margin-bottom:20px;
+
+}
+
+.market-price{
+
+    font-size:34px;
+
+    font-weight:700;
+
+    margin-bottom:15px;
+
+}
+
+.market-change{
+
+    font-size:18px;
+
+    font-weight:600;
+
+}
+
+.market-green{
+
+    color:#00e676;
+
+}
+
+.market-red{
+
+    color:#ff5252;
+
+}
