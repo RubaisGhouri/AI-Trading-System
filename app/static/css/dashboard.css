@@ -119,3 +119,48 @@
     height:620px;
 
 }
+.chart-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.chart-header p{
+
+    color:#7d8798;
+
+    margin-top:6px;
+
+}
+
+.chart-badge{
+
+    padding:8px 16px;
+
+    border-radius:30px;
+
+    background:#12d6a220;
+
+    color:#12d6a2;
+
+    font-weight:600;
+
+}
+
+#tradingview_chart{
+
+    width:100%;
+
+    height:620px;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+}

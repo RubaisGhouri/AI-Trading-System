@@ -69,39 +69,51 @@ loadMarket();
 
 setInterval(loadMarket,10000);
 
-if(document.getElementById("tradingview_chart")){
+if (document.getElementById("tradingview_chart")) {
 
-    const script=document.createElement("script");
+    const script = document.createElement("script");
 
-    script.src="https://s3.tradingview.com/tv.js";
+    script.src = "https://s3.tradingview.com/tv.js";
 
-    script.onload=function(){
+    script.onload = function () {
 
         new TradingView.widget({
 
-            autosize:true,
+            autosize: true,
 
-            symbol:"BINANCE:BTCUSDT",
+            symbol: "BINANCE:BTCUSDT",
 
-            interval:"15",
+            interval: "15",
 
-            timezone:"Etc/UTC",
+            timezone: "Etc/UTC",
 
-            theme:"dark",
+            theme: "dark",
 
-            style:"1",
+            style: "1",
 
-            locale:"en",
+            locale: "en",
 
-            toolbar_bg:"#111827",
+            toolbar_bg: "#111827",
 
-            enable_publishing:false,
+            enable_publishing: false,
 
-            hide_side_toolbar:false,
+            hide_side_toolbar: false,
 
-            allow_symbol_change:true,
+            allow_symbol_change: true,
 
-            container_id:"tradingview_chart"
+            withdateranges: true,
+
+            studies: [
+
+                "RSI@tv-basicstudies",
+
+                "MACD@tv-basicstudies",
+
+                "MASimple@tv-basicstudies"
+
+            ],
+
+            container_id: "tradingview_chart"
 
         });
 

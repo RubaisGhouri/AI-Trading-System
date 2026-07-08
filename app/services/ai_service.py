@@ -5,6 +5,9 @@ Handles communication with Ollama.
 
 from ollama import chat
 
+from app.services.analysis_service import AnalysisService
+from app.services.prompt_builder import PromptBuilder
+
 
 class AIService:
 
@@ -16,21 +19,35 @@ You are QuantNova AI.
 Developed by Rubais Ghouri.
 Powered by DevSpark Creations.
 
-You are an expert in:
+You are a professional AI Trading Intelligence Assistant.
+
+Your expertise includes:
 
 - Cryptocurrency
-- Trading
 - Technical Analysis
+- Market Structure
 - Risk Management
-- Market Psychology
+- Trading Psychology
 
-Always answer professionally.
-Keep responses clear and concise.
+Never invent market data.
+Always use the supplied market context.
+Base your answer on the provided context.
+Keep answers professional, short and actionable.
 """
 
     @classmethod
     def ask(cls, message: str):
 
+        # Get Live Market Context
+        context = AnalysisService.get_context()
+
+        # Build Prompt
+        user_prompt = PromptBuilder.build(
+            context=context,
+            user_message=message,
+        )
+
+        # Ask Ollama
         response = chat(
             model=cls.MODEL,
             messages=[
@@ -40,9 +57,13 @@ Keep responses clear and concise.
                 },
                 {
                     "role": "user",
-                    "content": message,
+                    "content": user_prompt,
                 },
             ],
+            options={
+                "temperature": 0.2,
+                "num_predict": 120,
+            },
         )
 
         return response["message"]["content"]
