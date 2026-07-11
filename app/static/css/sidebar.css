@@ -4,103 +4,184 @@
 
     top:0;
 
+    width:300px;
+
     height:100vh;
 
-    padding: 35px;
+    padding:25px;
 
     background:#0b1220;
 
     border-right:1px solid rgba(255,255,255,.08);
 
+    overflow-y:auto;
+
 }
 
-.logo{
-    margin-bottom:50px;
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
+/* ===========================
+   Logo
+=========================== */
+
+.sidebar-logo{
+
+    margin-bottom:20px;
+
 }
 
-.logo h2{
-    font-size:40px;
-    line-height:1;
-    margin-bottom:8px;
-    color:white;
+.sidebar-logo h2{
+
+    font-size:42px;
+
+    font-weight:700;
+
+    color:#ffffff;
+
+    margin-bottom:4px;
+
+    line-height:1.1;
+
 }
 
-.logo span{
-    font-size:16px;
+.sidebar-logo span{
+
+    display:block;
+
+    color:#8892a6;
+
+    font-size:14px;
+
+    margin-bottom:14px;
+
     line-height:1.4;
-    color:#7d8798;
+
 }
+
+/* ===========================
+   Branding Box
+=========================== */
+
+.brand-box{
+
+    background:rgba(18,214,162,.08);
+
+    border:1px solid rgba(18,214,162,.18);
+
+    border-radius:14px;
+
+    padding:14px 18px;
+
+    margin-bottom:22px;
+
+}
+
+.brand-box p{
+
+    color:#8892a6;
+
+    font-size:12px;
+
+    margin-bottom:4px;
+
+}
+
+.brand-box strong{
+
+    display:block;
+
+    color:#12d6a2;
+
+    font-size:16px;
+
+    margin-bottom:6px;
+
+}
+
+.brand-box small{
+
+    display:block;
+
+    color:#cfd5e3;
+
+    font-size:11px;
+
+    line-height:1.5;
+
+}
+
+/* ===========================
+   Navigation
+=========================== */
 
 .sidebar nav{
+
     display:flex;
+
     flex-direction:column;
-    gap:10px;
-    margin-top:25px;
+
+    gap:6px;
+
 }
 
 .sidebar nav a{
 
-    padding:16px 18px;
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px 14px;
 
     border-radius:12px;
 
     color:#cfd5e3;
 
-    transition:.3s;
+    font-size:15px;
+
+    font-weight:500;
+
+    transition:.25s;
 
 }
 
 .sidebar nav a:hover{
 
-    background:#12d6a222;
+    background:#12d6a220;
 
     color:#12d6a2;
 
 }
 
-.sidebar-footer{
+.sidebar nav a.active{
 
-    position:absolute;
+    background:#12d6a2;
 
-    bottom:30px;
+    color:#000;
 
-    left:35px;
-
-    right:35px;
-
-    padding-top:20px;
-
-    border-top:1px solid rgba(255,255,255,.08);
+    font-weight:600;
 
 }
 
-.sidebar-footer p{
+/* ===========================
+   Scrollbar
+=========================== */
 
-    font-size:12px;
+.sidebar::-webkit-scrollbar{
 
-    color:#7d8798;
-
-    margin-bottom:4px;
-
-}
-
-.sidebar-footer h4{
-
-    font-size:16px;
-
-    margin-bottom:4px;
-
-    color:white;
+    width:6px;
 
 }
 
-.sidebar-footer span{
+.sidebar::-webkit-scrollbar-thumb{
 
-    font-size:12px;
+    background:#12d6a255;
 
-    color:#12d6a2;
+    border-radius:20px;
+
+}
+
+.sidebar::-webkit-scrollbar-track{
+
+    background:transparent;
 
 }

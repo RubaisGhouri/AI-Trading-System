@@ -1,24 +1,21 @@
 console.log("QuantNova Started...");
 
 async function loadMarket() {
+  try {
+    const response = await fetch("/api/market");
 
-    try {
+    const data = await response.json();
 
-        const response = await fetch("/api/market");
+    const grid = document.getElementById("market-grid");
 
-        const data = await response.json();
+    if (!grid) return;
 
-        const grid = document.getElementById("market-grid");
+    grid.innerHTML = "";
 
-        if (!grid) return;
+    data.forEach((coin) => {
+      const positive = coin.change >= 0;
 
-        grid.innerHTML = "";
-
-        data.forEach((coin) => {
-
-            const positive = coin.change >= 0;
-
-            grid.innerHTML += `
+      grid.innerHTML += `
 
                 <div class="market-card">
 
@@ -50,77 +47,62 @@ async function loadMarket() {
                 </div>
 
             `;
-
-        });
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-    }
-
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 loadMarket();
 
 /* Refresh every 10 seconds */
 
-setInterval(loadMarket,10000);
+setInterval(loadMarket, 10000);
 
 if (document.getElementById("tradingview_chart")) {
+  const script = document.createElement("script");
 
-    const script = document.createElement("script");
+  script.src = "https://s3.tradingview.com/tv.js";
 
-    script.src = "https://s3.tradingview.com/tv.js";
+  script.onload = function () {
+    new TradingView.widget({
+      autosize: true,
 
-    script.onload = function () {
+      symbol: "BINANCE:BTCUSDT",
 
-        new TradingView.widget({
+      interval: "15",
 
-            autosize: true,
+      timezone: "Etc/UTC",
 
-            symbol: "BINANCE:BTCUSDT",
+      theme: "dark",
 
-            interval: "15",
+      style: "1",
 
-            timezone: "Etc/UTC",
+      locale: "en",
 
-            theme: "dark",
+      toolbar_bg: "#111827",
 
-            style: "1",
+      enable_publishing: false,
 
-            locale: "en",
+      hide_side_toolbar: false,
 
-            toolbar_bg: "#111827",
+      allow_symbol_change: true,
 
-            enable_publishing: false,
+      withdateranges: true,
 
-            hide_side_toolbar: false,
+      studies: [
+        "RSI@tv-basicstudies",
 
-            allow_symbol_change: true,
+        "MACD@tv-basicstudies",
 
-            withdateranges: true,
+        "MASimple@tv-basicstudies",
+      ],
 
-            studies: [
+      container_id: "tradingview_chart",
+    });
+  };
 
-                "RSI@tv-basicstudies",
-
-                "MACD@tv-basicstudies",
-
-                "MASimple@tv-basicstudies"
-
-            ],
-
-            container_id: "tradingview_chart"
-
-        });
-
-    };
-
-    document.body.appendChild(script);
-
+  document.body.appendChild(script);
 }
 
 /* ================================
@@ -130,103 +112,85 @@ if (document.getElementById("tradingview_chart")) {
 const sendBtn = document.getElementById("send-btn");
 
 if (sendBtn) {
-
-    sendBtn.addEventListener("click", sendMessage);
-
+  sendBtn.addEventListener("click", sendMessage);
 }
 
 const input = document.getElementById("user-message");
 
 if (input) {
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
 
-    input.addEventListener("keydown", function (e) {
-
-        if (e.key === "Enter" && !e.shiftKey) {
-
-            e.preventDefault();
-
-            sendMessage();
-
-        }
-
-    });
-
+      sendMessage();
+    }
+  });
 }
 
 async function sendMessage() {
+  const input = document.getElementById("user-message");
 
-    const input = document.getElementById("user-message");
+  const chat = document.getElementById("chat-window");
 
-    const chat = document.getElementById("chat-window");
+  const message = input.value.trim();
 
-    const message = input.value.trim();
+  if (!message) return;
 
-    if (!message) return;
-
-    chat.innerHTML += `
+  chat.innerHTML += `
         <div class="user-message">
             ${message}
         </div>
     `;
 
-    input.value = "";
+  input.value = "";
 
-    chat.innerHTML += `
+  chat.innerHTML += `
         <div class="ai-message loading">
             QuantNova is thinking...
         </div>
     `;
 
-    chat.scrollTop = chat.scrollHeight;
+  chat.scrollTop = chat.scrollHeight;
 
-    try {
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
 
-        const response = await fetch("/api/chat", {
+      headers: {
+        "Content-Type": "application/json",
+      },
 
-            method: "POST",
+      body: JSON.stringify({
+        message: message,
+      }),
+    });
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+    const data = await response.json();
 
-            body: JSON.stringify({
-                message: message
-            })
+    document.querySelector(".loading").remove();
 
-        });
-
-        const data = await response.json();
-
-        document.querySelector(".loading").remove();
-
-        chat.innerHTML += `
+    chat.innerHTML += `
             <div class="ai-message">
                 ${data.reply}
             </div>
         `;
 
-        chat.scrollTop = chat.scrollHeight;
+    chat.scrollTop = chat.scrollHeight;
+  } catch (error) {
+    document.querySelector(".loading").remove();
 
-    }
-
-    catch (error) {
-
-        document.querySelector(".loading").remove();
-
-        chat.innerHTML += `
+    chat.innerHTML += `
             <div class="ai-message">
                 ❌ Failed to connect with QuantNova AI.
             </div>
         `;
 
-        console.error(error);
-
-    }
-
+    console.error(error);
+  }
 }
 
 async function loadSignal() {
-
+  try {
     const response = await fetch("/api/signal");
 
     const signal = await response.json();
@@ -235,54 +199,130 @@ async function loadSignal() {
 
     if (!div) return;
 
-    const color =
-        signal.signal === "BUY"
-            ? "#12d6a2"
-            : signal.signal === "SELL"
-            ? "#ff5c5c"
-            : "#ffc857";
+    const signalColor =
+      signal.signal === "BUY"
+        ? "#12d6a2"
+        : signal.signal === "SELL"
+          ? "#ff5b5b"
+          : "#ffc857";
+
+    const directionIcon =
+      signal.direction === "LONG"
+        ? "🟢 LONG"
+        : signal.direction === "SHORT"
+          ? "🔴 SHORT"
+          : "🟡 WAIT";
+
+    let reasons = "";
+
+    signal.reason.forEach((reason) => {
+      reasons += `<li>${reason}</li>`;
+    });
 
     div.innerHTML = `
 
-        <h1 style="color:${color};">
+            <h2 style="color:${signalColor};margin-bottom:20px;">
 
-            ${signal.signal}
+                ${directionIcon}
 
-        </h1>
+            </h2>
 
-        <p>
+            <div class="scanner-row">
 
-            Confidence
+                <span>Coin</span>
 
-            <b>${signal.confidence}%</b>
+                <strong>${signal.coin}</strong>
 
-        </p>
+            </div>
 
-        <p>
+            <div class="scanner-row">
 
-            Entry
+                <span>Confidence</span>
 
-            <b>${signal.entry}</b>
+                <strong>${signal.confidence}%</strong>
 
-        </p>
+            </div>
 
-        <p>
+            <div class="scanner-row">
 
-            Stop
+                <span>Entry Zone</span>
 
-            <b>${signal.stop_loss}</b>
+                <strong>${signal.entry}</strong>
 
-        </p>
+            </div>
 
-        <p>
+            <div class="scanner-row">
 
-            Target
+                <span>Take Profit 1</span>
 
-            <b>${signal.take_profit}</b>
+                <strong>${signal.tp1}</strong>
 
-        </p>
+            </div>
 
-    `;
+            <div class="scanner-row">
+
+                <span>Take Profit 2</span>
+
+                <strong>${signal.tp2}</strong>
+
+            </div>
+
+            <div class="scanner-row">
+
+                <span>Take Profit 3</span>
+
+                <strong>${signal.tp3}</strong>
+
+            </div>
+
+            <div class="scanner-row">
+
+                <span>Stop Loss</span>
+
+                <strong>${signal.stop_loss}</strong>
+
+            </div>
+
+            <div class="scanner-row">
+
+                <span>Risk / Reward</span>
+
+                <strong>${signal.risk_reward}</strong>
+
+            </div>
+
+            <div class="scanner-row">
+
+                <span>Timeframe</span>
+
+                <strong>${signal.timeframe}</strong>
+
+            </div>
+
+            <div class="scanner-row">
+
+                <span>Leverage</span>
+
+                <strong>${signal.leverage}</strong>
+
+            </div>
+
+            <div style="margin-top:20px;">
+
+                <strong>AI Analysis</strong>
+
+                <ul style="margin-top:10px;padding-left:20px;line-height:1.8;">
+
+                    ${reasons}
+
+                </ul>
+
+            </div>
+
+        `;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 loadSignal();
@@ -290,30 +330,25 @@ loadSignal();
 setInterval(loadSignal, 15000);
 
 async function loadScanner() {
+  try {
+    const response = await fetch("/api/opportunities");
 
-    try {
+    const data = await response.json();
 
-        const response = await fetch("/api/opportunities");
+    const container = document.getElementById("scanner-list");
 
-        const data = await response.json();
+    if (!container) return;
 
-        const container = document.getElementById("scanner-list");
+    container.innerHTML = "";
 
-        if (!container) return;
+    data.forEach((coin) => {
+      let color = "#ffc857";
 
-        container.innerHTML = "";
+      if (coin.signal === "BUY") color = "#12d6a2";
 
-        data.forEach((coin) => {
+      if (coin.signal === "SELL") color = "#ff5b5b";
 
-            let color = "#ffc857";
-
-            if (coin.signal === "BUY")
-                color = "#12d6a2";
-
-            if (coin.signal === "SELL")
-                color = "#ff5b5b";
-
-            container.innerHTML += `
+      container.innerHTML += `
 
                 <div class="scanner-row">
 
@@ -338,19 +373,13 @@ async function loadScanner() {
                 </div>
 
             `;
-
-        });
-
-    }
-
-    catch(err){
-
-        console.log(err);
-
-    }
-
+    });
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 loadScanner();
 
-setInterval(loadScanner,15000);
+setInterval(loadScanner, 15000);
+loadNews();
