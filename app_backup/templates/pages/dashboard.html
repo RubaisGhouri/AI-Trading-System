@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    {% include "components/dashboard/sidebar.html" %}
+
+    <main class="dashboard-main">
+
+        {% include "components/dashboard/topbar.html" %}
+
+        {% include "components/dashboard/chart.html" %}
+
+        <section class="widget-grid">
+
+            {% include "components/dashboard/watchlist.html" %}
+
+            {% include "components/dashboard/signals.html" %}
+
+            {% include "components/dashboard/portfolio.html" %}
+
+            {% include "components/dashboard/news.html" %}
+
+        </section>
+
+        {% include "components/dashboard/ai_panel.html" %}
+
+    </main>
+
+</div>
+
+{% endblock %}

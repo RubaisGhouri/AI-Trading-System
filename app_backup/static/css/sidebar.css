@@ -1,0 +1,187 @@
+.sidebar{
+
+    position:sticky;
+
+    top:0;
+
+    width:300px;
+
+    height:100vh;
+
+    padding:25px;
+
+    background:#0b1220;
+
+    border-right:1px solid rgba(255,255,255,.08);
+
+    overflow-y:auto;
+
+}
+
+/* ===========================
+   Logo
+=========================== */
+
+.sidebar-logo{
+
+    margin-bottom:20px;
+
+}
+
+.sidebar-logo h2{
+
+    font-size:42px;
+
+    font-weight:700;
+
+    color:#ffffff;
+
+    margin-bottom:4px;
+
+    line-height:1.1;
+
+}
+
+.sidebar-logo span{
+
+    display:block;
+
+    color:#8892a6;
+
+    font-size:14px;
+
+    margin-bottom:14px;
+
+    line-height:1.4;
+
+}
+
+/* ===========================
+   Branding Box
+=========================== */
+
+.brand-box{
+
+    background:rgba(18,214,162,.08);
+
+    border:1px solid rgba(18,214,162,.18);
+
+    border-radius:14px;
+
+    padding:14px 18px;
+
+    margin-bottom:22px;
+
+}
+
+.brand-box p{
+
+    color:#8892a6;
+
+    font-size:12px;
+
+    margin-bottom:4px;
+
+}
+
+.brand-box strong{
+
+    display:block;
+
+    color:#12d6a2;
+
+    font-size:16px;
+
+    margin-bottom:6px;
+
+}
+
+.brand-box small{
+
+    display:block;
+
+    color:#cfd5e3;
+
+    font-size:11px;
+
+    line-height:1.5;
+
+}
+
+/* ===========================
+   Navigation
+=========================== */
+
+.sidebar nav{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+
+}
+
+.sidebar nav a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px 14px;
+
+    border-radius:12px;
+
+    color:#cfd5e3;
+
+    font-size:15px;
+
+    font-weight:500;
+
+    transition:.25s;
+
+}
+
+.sidebar nav a:hover{
+
+    background:#12d6a220;
+
+    color:#12d6a2;
+
+}
+
+.sidebar nav a.active{
+
+    background:#12d6a2;
+
+    color:#000;
+
+    font-weight:600;
+
+}
+
+/* ===========================
+   Scrollbar
+=========================== */
+
+.sidebar::-webkit-scrollbar{
+
+    width:6px;
+
+}
+
+.sidebar::-webkit-scrollbar-thumb{
+
+    background:#12d6a255;
+
+    border-radius:20px;
+
+}
+
+.sidebar::-webkit-scrollbar-track{
+
+    background:transparent;
+
+}
