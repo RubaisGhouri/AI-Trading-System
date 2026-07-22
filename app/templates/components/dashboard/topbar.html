@@ -1,6 +1,6 @@
 <header class="topbar">
 
-    <div>
+    <div class="topbar-left">
 
         <h2>Trading Dashboard</h2>
 
@@ -10,10 +10,62 @@
 
     </div>
 
-    <button class="primary">
+    <div class="topbar-center">
 
-        Ask QuantNova
+        <div class="topbar-card">
 
-    </button>
+            <span class="label">
+                BTC
+            </span>
+
+            <strong id="topbar-btc-price">
+
+                Loading...
+
+            </strong>
+
+        </div>
+
+        <div class="topbar-card">
+
+            <span class="label">
+                24H
+            </span>
+
+            <strong id="topbar-btc-change">
+
+                --
+
+            </strong>
+
+        </div>
+
+        <div class="topbar-card">
+
+            <span class="label">
+                Time
+            </span>
+
+            <strong id="topbar-clock">
+
+                --:--
+
+            </strong>
+
+        </div>
+
+    </div>
+
+    <div class="topbar-right">
+
+        <button
+            class="primary"
+            id="ask-ai-btn">
+
+            Ask QuantNova
+
+        </button>
+
+    </div>
 
 </header>

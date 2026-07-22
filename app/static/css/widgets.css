@@ -30,6 +30,30 @@
 
 }
 
+/* ===================================
+        WIDGET HEADER
+=================================== */
+
+.widget-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.widget-header h3{
+
+    margin:0;
+
+    font-size:20px;
+
+}
+
 .widget h3{
 
     font-size:20px;
@@ -38,47 +62,51 @@
 
 }
 
-/* ===========================
-      SCANNER
-=========================== */
+/* ===================================
+        STATUS BADGE
+=================================== */
 
-.scanner-card{
+.status-badge{
 
-    height:360px;
+    background:#22c55e22;
+
+    color:#22c55e;
+
+    padding:5px 12px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:600;
 
 }
 
-#scanner-list{
+/* ===================================
+        COMMON LOADING
+=================================== */
+
+.loading{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
 
     flex:1;
 
-    overflow-y:auto;
+    color:#8892a6;
+
+    font-size:14px;
+
+    text-align:center;
 
 }
 
-#scanner-list::-webkit-scrollbar{
-
-    width:6px;
-
-}
-
-#scanner-list::-webkit-scrollbar-thumb{
-
-    background:#12d6a2;
-
-    border-radius:20px;
-
-}
-
-/* ===========================
-      PORTFOLIO
-=========================== */
-
-.portfolio-widget{
-
-    height:360px;
-
-}
+/* ===================================
+        COMMON ROW
+=================================== */
 
 .scanner-row{
 
@@ -87,6 +115,8 @@
     justify-content:space-between;
 
     align-items:center;
+
+    gap:15px;
 
     padding:14px 0;
 
@@ -114,13 +144,69 @@
 
 }
 
-/* ===========================
-      NEWS
-=========================== */
+/* ===================================
+        SCANNER
+=================================== */
+
+.scanner-widget{
+
+    min-height:360px;
+
+}
+
+#scanner-list{
+
+    flex:1;
+
+    overflow-y:auto;
+
+}
+
+#scanner-list::-webkit-scrollbar{
+
+    width:6px;
+
+}
+
+#scanner-list::-webkit-scrollbar-thumb{
+
+    background:#12d6a2;
+
+    border-radius:20px;
+
+}
+
+/* ===================================
+        SIGNAL
+=================================== */
+
+#signal-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+/* ===================================
+        PORTFOLIO
+=================================== */
+
+.portfolio-widget{
+
+    min-height:360px;
+
+}
+
+/* ===================================
+        NEWS
+=================================== */
 
 .news-card{
 
-    height:360px;
+    min-height:360px;
 
 }
 
@@ -176,6 +262,22 @@
 
 }
 
+.news-title a{
+
+    color:white;
+
+    text-decoration:none;
+
+    transition:.25s;
+
+}
+
+.news-title a:hover{
+
+    color:#12d6a2;
+
+}
+
 .news-meta{
 
     display:flex;
@@ -200,9 +302,9 @@
 
 }
 
-/* ===========================
-      AI PANEL
-=========================== */
+/* ===================================
+        AI PANEL
+=================================== */
 
 .ai-panel{
 
@@ -216,7 +318,7 @@
 
     border:1px solid rgba(255,255,255,.08);
 
-    min-height:420px;
+    min-height:650px;
 
 }
 
@@ -244,9 +346,11 @@
 
 .chat-window{
 
-    height:220px;
+    min-height:420px;
 
-    overflow-y:auto;
+    max-height:none;
+
+    overflow-y:hidden;
 
     background:#0d1322;
 
@@ -255,20 +359,6 @@
     padding:20px;
 
     margin-bottom:20px;
-
-}
-
-.chat-window::-webkit-scrollbar{
-
-    width:6px;
-
-}
-
-.chat-window::-webkit-scrollbar-thumb{
-
-    background:#12d6a2;
-
-    border-radius:20px;
 
 }
 
@@ -334,6 +424,8 @@
 
     padding:16px;
 
+    outline:none;
+
 }
 
 .chat-input button{
@@ -341,5 +433,39 @@
     width:140px;
 
     height:58px;
+
+}
+
+/* ===================================
+        RESPONSIVE
+=================================== */
+
+@media (max-width:768px){
+
+    .widget{
+
+        padding:18px;
+
+    }
+
+    .scanner-row{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+    .chat-input{
+
+        flex-direction:column;
+
+    }
+
+    .chat-input button{
+
+        width:100%;
+
+    }
 
 }

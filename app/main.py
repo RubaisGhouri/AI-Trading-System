@@ -15,6 +15,7 @@ from app.api.news import router as news_router
 from app.api.signal import router as signal_router
 from app.api.scanner import router as scanner_router
 from app.api.opportunities import router as opportunities_router
+from app.api.chat import router as chat_router
 
 
 
@@ -37,3 +38,4 @@ app.include_router(scanner_router)
 app.include_router(opportunities_router)
 app.include_router(portfolio_router, prefix="/api")
 app.include_router(news_router)
+app.include_router(chat_router, prefix="/api")

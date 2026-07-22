@@ -1,0 +1,642 @@
+[1mdiff --git a/app/api/market.py b/app/api/market.py[m
+[1mindex aed8831..62bf22d 100644[m
+[1m--- a/app/api/market.py[m
+[1m+++ b/app/api/market.py[m
+[36m@@ -1,10 +1,10 @@[m
+ """[m
+[31m-Market API.[m
+[32m+[m[32mQuantNova Market API[m
+ """[m
+ [m
+ from fastapi import APIRouter[m
+ [m
+[31m-from app.services.market_service import MarketService[m
+[32m+[m[32mfrom app.services.market_data_service import MarketDataService[m
+ [m
+ router = APIRouter([m
+     prefix="/api/market",[m
+[36m@@ -13,6 +13,24 @@[m [mrouter = APIRouter([m
+ [m
+ [m
+ @router.get("/")[m
+[31m-def get_market():[m
+[32m+[m[32masync def market_overview():[m
+ [m
+[31m-    return MarketService.get_market_data()[m
+\ No newline at end of file[m
+[32m+[m[32m    return MarketDataService.get_market_overview()[m
+[32m+[m
+[32m+[m
+[32m+[m[32m@router.get("/{symbol}")[m
+[32m+[m[32masync def market_symbol(symbol: str):[m
+[32m+[m
+[32m+[m[32m    data = MarketDataService.get_symbol(symbol)[m
+[32m+[m
+[32m+[m[32m    if data:[m
+[32m+[m
+[32m+[m[32m        return data[m
+[32m+[m
+[32m+[m[32m    return {[m
+[32m+[m
+[32m+[m[32m        "success": False,[m
+[32m+[m
+[32m+[m[32m        "message": "Symbol not found"[m
+[32m+[m
+[32m+[m[32m    }[m
+\ No newline at end of file[m
+[1mdiff --git a/app/api/market_service.py b/app/api/market_service.py[m
+[1mdeleted file mode 100644[m
+[1mindex 248dacf..0000000[m
+[1m--- a/app/api/market_service.py[m
+[1m+++ /dev/null[m
+[36m@@ -1,69 +0,0 @@[m
+[31m-"""[m
+[31m-Market Data Service[m
+[31m-QuantNova[m
+[31m-[m
+[31m-Developed by Rubais Ghouri[m
+[31m-Powered by DevSpark Creations[m
+[31m-"""[m
+[31m-[m
+[31m-import requests[m
+[31m-[m
+[31m-[m
+[31m-class MarketService:[m
+[31m-[m
+[31m-    BASE_URL = "https://api.binance.com/api/v3/ticker/24hr"[m
+[31m-[m
+[31m-    SYMBOLS = [[m
+[31m-        "BTCUSDT",[m
+[31m-        "ETHUSDT",[m
+[31m-        "BNBUSDT",[m
+[31m-        "SOLUSDT",[m
+[31m-        "XRPUSDT",[m
+[31m-        "DOGEUSDT",[m
+[31m-        "ADAUSDT",[m
+[31m-    ][m
+[31m-[m
+[31m-    @classmethod[m
+[31m-    def get_market_data(cls):[m
+[31m-[m
+[31m-        markets = [][m
+[31m-[m
+[31m-        for symbol in cls.SYMBOLS:[m
+[31m-[m
+[31m-            try:[m
+[31m-[m
+[31m-                response = requests.get([m
+[31m-                    cls.BASE_URL,[m
+[31m-                    params={"symbol": symbol},[m
+[31m-                    timeout=5,[m
+[31m-                )[m
+[31m-[m
+[31m-                response.raise_for_status()[m
+[31m-[m
+[31m-                data = response.json()[m
+[31m-[m
+[31m-                markets.append([m
+[31m-                    {[m
+[31m-                        "symbol": symbol.replace("USDT", ""),[m
+[31m-                        "price": round(float(data["lastPrice"]), 2),[m
+[31m-                        "change": round(float(data["priceChangePercent"]), 2),[m
+[31m-                        "volume": round(float(data["volume"]), 2),[m
+[31m-                        "high": round(float(data["highPrice"]), 2),[m
+[31m-                        "low": round(float(data["lowPrice"]), 2),[m
+[31m-                    }[m
+[31m-                )[m
+[31m-[m
+[31m-            except Exception:[m
+[31m-[m
+[31m-                markets.append([m
+[31m-                    {[m
+[31m-                        "symbol": symbol.replace("USDT", ""),[m
+[31m-                        "price": 0,[m
+[31m-                        "change": 0,[m
+[31m-                        "volume": 0,[m
+[31m-                        "high": 0,[m
+[31m-                        "low": 0,[m
+[31m-                    }[m
+[31m-                )[m
+[31m-[m
+[31m-        return markets[m
+\ No newline at end of file[m
+[1mdiff --git a/app/api/news.py b/app/api/news.py[m
+[1mindex 015bf05..25841d1 100644[m
+[1m--- a/app/api/news.py[m
+[1m+++ b/app/api/news.py[m
+[36m@@ -1,13 +1,18 @@[m
+ """[m
+[31m-News API[m
+[32m+[m[32mQuantNova News API[m
+ """[m
+ [m
+ from fastapi import APIRouter[m
+[32m+[m
+ from app.services.news_service import NewsService[m
+ [m
+[31m-router = APIRouter()[m
+[32m+[m[32mrouter = APIRouter([m
+[32m+[m[32m    prefix="/api/news",[m
+[32m+[m[32m    tags=["News"],[m
+[32m+[m[32m)[m
+[32m+[m
+ [m
+[32m+[m[32m@router.get("/")[m
+[32m+[m[32masync def latest_news():[m
+ [m
+[31m-@router.get("/api/news")[m
+[31m-def get_news():[m
+[31m-    return NewsService.get_news()[m
+\ No newline at end of file[m
+[32m+[m[32m    return NewsService.get_latest_news()[m
+\ No newline at end of file[m
+[1mdiff --git a/app/api/opportunities.py b/app/api/opportunities.py[m
+[1mindex 1c1d8ea..2587233 100644[m
+[1m--- a/app/api/opportunities.py[m
+[1m+++ b/app/api/opportunities.py[m
+[36m@@ -1,11 +1,11 @@[m
+ from fastapi import APIRouter[m
+[31m-[m
+ from app.services.opportunity_service import OpportunityService[m
+ [m
+[31m-router = APIRouter()[m
+[31m-[m
+[32m+[m[32mrouter = APIRouter([m
+[32m+[m[32m    prefix="/api/opportunities",[m
+[32m+[m[32m    tags=["Opportunities"][m
+[32m+[m[32m)[m
+ [m
+[31m-@router.get("/api/opportunities")[m
+[32m+[m[32m@router.get("/")[m
+ async def opportunities():[m
+[31m-[m
+     return OpportunityService.scan()[m
+\ No newline at end of file[m
+[1mdiff --git a/app/api/portfolio.py b/app/api/portfolio.py[m
+[1mindex 16704c1..ec98deb 100644[m
+[1m--- a/app/api/portfolio.py[m
+[1m+++ b/app/api/portfolio.py[m
+[36m@@ -1,11 +1,20 @@[m
+[31m-from fastapi import APIRouter[m
+[32m+[m[32m"""[m
+[32m+[m[32mQuantNova Portfolio API[m
+[32m+[m[32m"""[m
+ [m
+[31m-from app.services.portfolio_service import PortfolioService[m
+[32m+[m[32mfrom fastapi import APIRouter[m
+ [m
+[31m-router = APIRouter()[m
+[32m+[m[32mrouter = APIRouter(prefix="/api/portfolio", tags=["Portfolio"])[m
+ [m
+ [m
+[31m-@router.get("/portfolio")[m
+[31m-def portfolio():[m
+[32m+[m[32m@router.get("/")[m
+[32m+[m[32masync def portfolio():[m
+ [m
+[31m-    return PortfolioService.get_summary()[m
+\ No newline at end of file[m
+[32m+[m[32m    return {[m
+[32m+[m[32m        "balance": 25000,[m
+[32m+[m[32m        "equity": 25780,[m
+[32m+[m[32m        "pnl": 780,[m
+[32m+[m[32m        "open_positions": 3,[m
+[32m+[m[32m        "broker": "Binance",[m
+[32m+[m[32m        "connected": True,[m
+[32m+[m[32m    }[m
+\ No newline at end of file[m
+[1mdiff --git a/app/api/signal.py b/app/api/signal.py[m
+[1mindex 581295b..12999b3 100644[m
+[1m--- a/app/api/signal.py[m
+[1m+++ b/app/api/signal.py[m
+[36m@@ -1,11 +1,18 @@[m
+[32m+[m[32m"""[m
+[32m+[m[32mQuantNova AI Signal API[m
+[32m+[m[32m"""[m
+[32m+[m
+ from fastapi import APIRouter[m
+ [m
+[31m-from app.services.signal_service import SignalService[m
+[32m+[m[32mfrom app.services.ai_signal_service import AISignalService[m
+ [m
+[31m-router = APIRouter()[m
+[32m+[m[32mrouter = APIRouter([m
+[32m+[m[32m    prefix="/api/signal",[m
+[32m+[m[32m    tags=["AI Signal"],[m
+[32m+[m[32m)[m
+ [m
+ [m
+[31m-@router.get("/api/signal")[m
+[31m-async def signal():[m
+[32m+[m[32m@router.get("/")[m
+[32m+[m[32masync def current_signal():[m
+ [m
+[31m-    return SignalService.analyze()[m
+\ No newline at end of file[m
+[32m+[m[32m    return AISignalService.generate_signal()[m
+\ No newline at end of file[m
+[1mdiff --git a/app/main.py b/app/main.py[m
+[1mindex bb9f69b..9512607 100644[m
+[1m--- a/app/main.py[m
+[1m+++ b/app/main.py[m
+[36m@@ -1,39 +1,53 @@[m
+ """[m
+[31m-QuantNova FastAPI Application.[m
+[32m+[m[32mQuantNova FastAPI Application[m
+ """[m
+ [m
+ from fastapi import FastAPI[m
+ from fastapi.staticfiles import StaticFiles[m
+ from fastapi.templating import Jinja2Templates[m
+ [m
+[32m+[m[32m# HTML Routes[m
+ from app.routes.home import router as home_router[m
+[32m+[m
+[32m+[m[32m# API Routes[m
+ from app.api.market import router as market_router[m
+[31m-from app.api.ai import router as ai_router[m
+[31m-from app.api.portfolio import router as portfolio_router[m
+ from app.api.news import router as news_router[m
+[31m-[m
+[32m+[m[32mfrom app.api.dashboard import router as dashboard_router[m
+ from app.api.signal import router as signal_router[m
+[31m-from app.api.scanner import router as scanner_router[m
+[32m+[m[32mfrom app.api.portfolio import router as portfolio_router[m
+[32m+[m[32mfrom app.api.auth import router as auth_router[m
+ from app.api.opportunities import router as opportunities_router[m
+ [m
+[31m-[m
+[31m-[m
+ app = FastAPI([m
+     title="QuantNova",[m
+     description="Advanced AI Trading Intelligence Platform",[m
+[31m-    version="1.0.0",[m
+[32m+[m[32m    version="2.0.0",[m
+ )[m
+ [m
+[31m-app.mount("/static", StaticFiles(directory="app/static"), name="static")[m
+[32m+[m[32m# Static Files[m
+[32m+[m[32mapp.mount([m
+[32m+[m[32m    "/static",[m
+[32m+[m[32m    StaticFiles(directory="app/static"),[m
+[32m+[m[32m    name="static",[m
+[32m+[m[32m)[m
+ [m
+[32m+[m[32m# Templates[m
+ templates = Jinja2Templates(directory="app/templates")[m
+ [m
+[31m-# Routes[m
+[32m+[m[32m# ----------------------------[m
+[32m+[m[32m# HTML Routes[m
+[32m+[m[32m# ----------------------------[m
+[32m+[m
+ app.include_router(home_router)[m
+[32m+[m
+[32m+[m[32m# ----------------------------[m
+[32m+[m[32m# API Routes[m
+[32m+[m[32m# ----------------------------[m
+[32m+[m
+ app.include_router(market_router)[m
+[31m-app.include_router(ai_router, prefix="/api")[m
+[32m+[m[32mapp.include_router(news_router)[m
+[32m+[m[32mapp.include_router(dashboard_router)[m
+ app.include_router(signal_router)[m
+[31m-app.include_router(scanner_router)[m
+[31m-app.include_router(opportunities_router)[m
+[31m-app.include_router(portfolio_router, prefix="/api")[m
+[31m-app.include_router(news_router)[m
+\ No newline at end of file[m
+[32m+[m[32mapp.include_router(portfolio_router)[m
+[32m+[m[32mapp.include_router(auth_router)[m
+[32m+[m[32mapp.include_router(opportunities_router)[m
+\ No newline at end of file[m
+[1mdiff --git a/app/routes/home.py b/app/routes/home.py[m
+[1mindex f98debf..6c41b8e 100644[m
+[1m--- a/app/routes/home.py[m
+[1m+++ b/app/routes/home.py[m
+[36m@@ -12,12 +12,13 @@[m [masync def home(request: Request):[m
+ [m
+     return templates.TemplateResponse([m
+         request=request,[m
+[31m-        name="index.html",[m
+[32m+[m[32m        name="pages/landing.html",[m
+         context={[m
+             "title": "QuantNova",[m
+         },[m
+     )[m
+ [m
+[32m+[m
+ @router.get("/dashboard", response_class=HTMLResponse)[m
+ async def dashboard(request: Request):[m
+ [m
+[1mdiff --git a/app/services/confluence_service.py b/app/services/confluence_service.py[m
+[1mdeleted file mode 100644[m
+[1mindex f759577..0000000[m
+[1m--- a/app/services/confluence_service.py[m
+[1m+++ /dev/null[m
+[36m@@ -1,241 +0,0 @@[m
+[31m-"""[m
+[31m-QuantNova Institutional Confluence Engine[m
+[31m-"""[m
+[31m-[m
+[31m-from app.services.technical_service import TechnicalService[m
+[31m-from app.services.support_resistance_service import SupportResistanceService[m
+[31m-from app.services.multi_timeframe_service import MultiTimeframeService[m
+[31m-from app.services.smc_service import SMCService[m
+[31m-from app.services.order_block_service import OrderBlockService[m
+[31m-from app.services.fvg_service import FVGService[m
+[31m-[m
+[31m-[m
+[31m-class ConfluenceService:[m
+[31m-[m
+[31m-    @classmethod[m
+[31m-    def analyze(cls):[m
+[31m-[m
+[31m-        technical = TechnicalService.analyze()[m
+[31m-[m
+[31m-        sr = SupportResistanceService.analyze()[m
+[31m-[m
+[31m-        mtf = MultiTimeframeService.analyze()[m
+[31m-[m
+[31m-        smc = SMCService.analyze()[m
+[31m-[m
+[31m-        ob = OrderBlockService.analyze()[m
+[31m-[m
+[31m-        fvg = FVGService.analyze()[m
+[31m-[m
+[31m-        score = 0[m
+[31m-[m
+[31m-        reasons = [][m
+[31m-[m
+[31m-        # =====================================[m
+[31m-        # Trend[m
+[31m-        # =====================================[m
+[31m-[m
+[31m-        if technical["trend"] == "BULLISH":[m
+[31m-[m
+[31m-            score += 20[m
+[31m-            reasons.append("Bullish Trend")[m
+[31m-[m
+[31m-        elif technical["trend"] == "BEARISH":[m
+[31m-[m
+[31m-            score -= 20[m
+[31m-            reasons.append("Bearish Trend")[m
+[31m-[m
+[31m-        # =====================================[m
+[31m-        # RSI[m
+[31m-        # =====================================[m
+[31m-[m
+[31m-        if technical["rsi"] < 35:[m
+[31m-[m
+[31m-            score += 10[m
+[31m-            reasons.append("Oversold RSI")[m
+[31m-[m
+[31m-        elif technical["rsi"] > 70:[m
+[31m-[m
+[31m-            score -= 10[m
+[31m-            reasons.append("Overbought RSI")[m
+[31m-[m
+[31m-        # =====================================[m
+[31m-        # MACD[m
+[31m-        # =====================================[m
+[31m-[m
+[31m-        if technical["macd_cross"]:[m
+[31m-[m
+[31m-            score += 15[m
+[31m-            reasons.append("Bullish MACD")[m
+[31m-[m
+[31m-        else:[m
+[31m-[m
+[31m-            score -= 15[m
+[31m-            reasons.append("Bearish MACD")[m
+[31m-[m
+[31m-        # =====================================[m
+[31m-        # ADX[m
+[31m-        # =====================================[m
+[31m-[m
+[31m-        if technical["adx"] > 25:[m
+[31m-[m
+[31m-            score += 10[m
+[31m-            reasons.append("Strong Trend")[m
+[31m-[m
+[31m-        # =====================================[m
+[31m-        # Volume[m
+[31m-        # =====================================[m
+[31m-[m
+[31m-        if technical["volume_breakout"]:[m
+[31m-[m
+[31m-            score += 10[m
+[31m-            reasons.append("Volume Breakout")[m
+[31m-[m
+[31m-        # =====================================[m
+[31m-        # BOS[m
+[31m-        # =====================================[m
+[31m-[m
+[31m-        if smc["bos"] == "BULLISH BOS":[m
+[31m-[m
+[31m-            score += 20[m
+[31m-            reasons.append("Bullish BOS")[m
+[31m-[m
+[31m-        elif smc["bos"] == "BEARISH BOS":[m
+[31m-[m
+[31m-            score -= 20[m
+[31m-            reasons.append("Bearish BOS")[m
+[31m-[m
+[31m-        # =====================================[m
+[31m-        # CHOCH[m
+[31m-        # =====================================[m
+[31m-[m
+[31m-        if smc["choch"] == "BULLISH CHOCH":[m
+[31m-[m
+[31m-            score += 15[m
+[31m-            reasons.append("Bullish CHOCH")[m
+[31m-[m
+[31m-        elif smc["choch"] == "BEARISH CHOCH":[m
+[31m-[m
+[31m-            score -= 15[m
+[31m-            reasons.append("Bearish CHOCH")[m
+[31m-[m
+[31m-        # =====================================[m
+[31m-        # Order Blocks[m
+[31m-        # =====================================[m
+[31m-[m
+[31m-        if ob["bullish_order_block"]:[m
+[31m-[m
+[31m-            score += 10[m
+[31m-            reasons.append("Bullish Order Block")[m
+[31m-[m
+[31m-        if ob["bearish_order_block"]:[m
+[31m-[m
+[31m-            score -= 10[m
+[31m-            reasons.append("Bearish Order Block")[m
+[31m-[m
+[31m-        # =====================================[m
+[31m-        # Fair Value Gap[m
+[31m-        # =====================================[m
+[31m-[m
+[31m-        if fvg["latest_bullish_fvg"]:[m
+[31m-[m
+[31m-            score += 8[m
+[31m-            reasons.append("Bullish FVG")[m
+[31m-[m
+[31m-        if fvg["latest_bearish_fvg"]:[m
+[31m-[m
+[31m-            score -= 8[m
+[31m-            reasons.append("Bearish FVG")[m
+[31m-[m
+[31m-        # =====================================[m
+[31m-        # Support Resistance[m
+[31m-        # =====================================[m
+[31m-[m
+[31m-        if technical["price"] > sr["support"]:[m
+[31m-[m
+[31m-            score += 5[m
+[31m-[m
+[31m-        if technical["price"] < sr["resistance"]:[m
+[31m-[m
+[31m-            score += 5[m
+[31m-[m
+[31m-        # =====================================[m
+[31m-        # Multi Timeframe[m
+[31m-        # =====================================[m
+[31m-[m
+[31m-        bullish = 0[m
+[31m-        bearish = 0[m
+[31m-[m
+[31m-        for timeframe, tf in mtf.items():[m
+[31m-[m
+[31m-            # overall ko ignore karo[m
+[31m-            if timeframe == "overall":[m
+[31m-                continue[m
+[31m-[m
+[31m-            trend = tf.get("trend")[m
+[31m-[m
+[31m-            if trend == "BULLISH":[m
+[31m-[m
+[31m-                bullish += 1[m
+[31m-[m
+[31m-            elif trend == "BEARISH":[m
+[31m-[m
+[31m-                bearish += 1[m
+[31m-[m
+[31m-        if bullish > bearish:[m
+[31m-[m
+[31m-            score += 15[m
+[31m-            reasons.append("Multi TF Bullish")[m
+[31m-[m
+[31m-        elif bearish > bullish:[m
+[31m-[m
+[31m-            score -= 15[m
+[31m-            reasons.append("Multi TF Bearish")[m
+[31m-[m
+[31m-        # =====================================[m
+[31m-        # Final Score[m
+[31m-        # =====================================[m
+[31m-[m
+[31m-        score = max(-100, min(score, 100))[m
+[31m-[m
+[31m-        if score >= 60:[m
+[31m-[m
+[31m-            signal = "STRONG BUY"[m
+[31m-[m
+[31m-        elif score >= 25:[m
+[31m-[m
+[31m-            signal = "BUY"[m
+[31m-[m
+[31m-        elif score <= -60:[m
+[31m-[m
+[31m-            signal = "STRONG SELL"[m
+[31m-[m
+[31m-        elif score <= -25:[m
+[31m-[m
+[31m-            signal = "SELL"[m
+[31m-[m
+[31m-        else:[m
+[31m-[m
+[31m-            signal = "WAIT"[m
+[31m-[m
+[31m-        return {[m
+[31m-[m
+[31m-            "score": score,[m
+[31m-[m
+[31m-            "signal": signal,[m
+[31m-[m
+[31m-            "reasons": reasons,[m
+[31m-[m
+[31m-            "technical": technical,[m
+[31m-[m
+[31m-            "smc": smc,[m
+[31m-[m
+[31m-            "order_blocks": ob,[m
+[31m-[m
+[31m-            "fvg": fvg,[m
+[31m-[m
+[31m-            "support_resistance": sr,[m
+[31m-[m
+[31m-            "multi_timeframe": mtf[m
+[31m-[m
+[31m-        }[m
+\ No newline at end of file[m
+[1mdiff --git a/app/services/fvg_service.py b/app/services/fvg_service.py[m
+[1mdeleted file mode 100644[m
+[1mindex 194ee94..0000000[m
+[1m--- a/app/services/fvg_service.py[m
+[1m+++ /dev/null[m
+[36m@@ -1,76 +0,0 @@[m
+[31m-"""[m
+[31m-QuantNova Fair Value Gap Detection Engine[m
+[31m-Uses Shared MarketDataService[m
+[31m-"""[m
+[31m-[m
+[31m-from app.services.market_data_service import MarketDataService[m
+[31m-[m
+[31m-[m
+[31m-class FVGService:[m
+[31m-[m
+[31m-    @classmethod[m
+[31m-    def analyze([m
+[31m-        cls,[m
+[31m-        symbol="BTCUSDT",[m
+[31m-        interval="1h",[m
+[31m-        limit=300,[m
+[31m-    ):[m
+[31m-[m
+[31m-        df = MarketDataService.get_dataframe([m
+[31m-            symbol=symbol,[m
+[31m-            interval=interval,[m
+[31m-            limit=limit,[m
+[31m-        )[m
+[31m-[m
+[31m-        bullish = [][m
+[31m-        bearish = [][m
+[31m-[m
+[31m-        for i in range(1, len(df) - 1):[m
+[31m-[m
+[31m-            # Bullish FVG[m
+[31m-            if df["low"][i + 1] > df["high"][i - 1]:[m
+[31m-[m
+[31m-                bullish.append({[m
+[31m-[m
+[31m-                    "low": round(df["high"][i - 1], 2),[m
+[31m-[m
+[31m-                    "high": round(df["low"][i + 1], 2),[m
+[31m-[m
+[31m-                    "size": round([m
+[31m-                        df["low"][i + 1] - df["high"][i - 1],[m
+[31m-                        2[m
+[31m-                    )[m
+[31m-[m
+[31m-                })[m
+[31m-[m
+[31m-            # Bearish FVG[m
+[31m-            if df["high"][i + 1] < df["low"][i - 1]:[m
+[31m-[m
+[31m-                bearish.append({[m
+[31m-[m
+[31m-                    "high": round(df["low"][i - 1], 2),[m
+[31m-[m
+[31m-                    "low": round(df["high"][i + 1], 2),[m
+[31m-[m
+[31m-                    "size": round([m
+[31m-                        df["low"][i - 1] - df["high"][i + 1],[m
+[3

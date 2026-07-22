@@ -3,6 +3,7 @@ QuantNova AI Service.
 Handles communication with Ollama.
 """
 
+import time
 from ollama import chat
 
 from app.services.analysis_service import AnalysisService
@@ -19,51 +20,77 @@ You are QuantNova AI.
 Developed by Rubais Ghouri.
 Powered by DevSpark Creations.
 
-You are a professional AI Trading Intelligence Assistant.
+You are a premium AI Trading Assistant.
 
-Your expertise includes:
+Your personality:
 
-- Cryptocurrency
-- Technical Analysis
-- Market Structure
-- Risk Management
-- Trading Psychology
+- Friendly
+- Professional
+- Conversational
+- Helpful
 
-Never invent market data.
-Always use the supplied market context.
-Base your answer on the provided context.
-Keep answers professional, short and actionable.
+You specialize in:
+
+• Cryptocurrency
+• Technical Analysis
+• Smart Money Concepts
+• Risk Management
+• Trading Psychology
+
+Rules:
+
+- Reply naturally.
+- Never sound robotic.
+- Use the provided market context only when relevant.
+- If the user greets you, greet back.
+- If the user asks educational questions, teach them.
+- If the user asks about signals, explain the current signal.
+- Never invent prices.
+- Keep replies between 40 and 120 words.
 """
 
     @classmethod
     def ask(cls, message: str):
 
-        # Get Live Market Context
+        print("=" * 70)
+        print("QuantNova AI Request")
+        print("=" * 70)
+
+        start = time.time()
+
         context = AnalysisService.get_context()
 
-        # Build Prompt
-        user_prompt = PromptBuilder.build(
+        print("Context Loaded")
+
+        prompt = PromptBuilder.build(
             context=context,
-            user_message=message,
+            user_message=message
         )
 
-        # Ask Ollama
+        print("Prompt Built Successfully")
+
         response = chat(
             model=cls.MODEL,
             messages=[
                 {
                     "role": "system",
-                    "content": cls.SYSTEM_PROMPT,
+                    "content": cls.SYSTEM_PROMPT
                 },
                 {
                     "role": "user",
-                    "content": user_prompt,
-                },
+                    "content": prompt
+                }
             ],
             options={
-                "temperature": 0.2,
-                "num_predict": 120,
-            },
+                "temperature": 0.1,
+                "top_p": 0.8,
+                "num_predict": 60,
+                "repeat_penalty": 1.1
+            }
         )
 
-        return response["message"]["content"]
+        end = time.time()
+
+        print(f"Ollama Response Received ({round(end-start,2)} sec)")
+
+        return response["message"]["content"].strip()

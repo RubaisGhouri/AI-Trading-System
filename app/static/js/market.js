@@ -1,16 +1,14 @@
-console.log("Market Module Loaded");
-
 async function loadMarket() {
+
+    const grid = document.getElementById("market-grid");
+
+    if (!grid) return;
 
     try {
 
-        const response = await fetch("/api/market");
+        const response = await fetch("/api/market/");
 
         const data = await response.json();
-
-        const grid = document.getElementById("market-grid");
-
-        if (!grid) return;
 
         grid.innerHTML = "";
 
@@ -19,7 +17,6 @@ async function loadMarket() {
             const positive = coin.change >= 0;
 
             grid.innerHTML += `
-
                 <div class="market-card">
 
                     <div class="market-symbol">
@@ -30,34 +27,46 @@ async function loadMarket() {
                         $${Number(coin.price).toLocaleString()}
                     </div>
 
-                    <div class="market-change ${positive ? "market-green" : "market-red"}">
+                    <div class="${positive ? "market-green" : "market-red"}">
+
                         ${positive ? "▲" : "▼"}
+
                         ${coin.change.toFixed(2)}%
+
                     </div>
 
-                    <br>
+                    <div class="market-volume">
 
-                    <small>
-                        Volume:
+                        Vol:
                         ${Number(coin.volume).toLocaleString()}
-                    </small>
+
+                    </div>
 
                 </div>
-
             `;
 
         });
 
     }
 
-    catch (error) {
+    catch(error){
 
         console.error(error);
+
+        grid.innerHTML = `
+            <div class="loading">
+                Unable to load market data.
+            </div>
+        `;
 
     }
 
 }
 
-loadMarket();
+document.addEventListener("DOMContentLoaded",()=>{
 
-setInterval(loadMarket,10000);
+    loadMarket();
+
+    setInterval(loadMarket,10000);
+
+});

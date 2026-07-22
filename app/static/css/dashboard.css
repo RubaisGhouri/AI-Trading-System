@@ -177,3 +177,83 @@
     }
 
 }
+
+.market-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr;
+
+    gap:14px;
+
+    margin-top:18px;
+
+}
+
+.market-card{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#151d2d;
+
+    border:1px solid rgba(255,255,255,.06);
+
+    border-radius:14px;
+
+    padding:18px;
+
+    transition:.25s;
+
+}
+
+.market-card:hover{
+    transform:translateY(-3px);
+    border-color:#3b82f6;
+}
+
+.market-symbol{
+    font-size:18px;
+    font-weight:700;
+}
+
+.market-price{
+    margin-top:8px;
+    font-size:22px;
+    font-weight:700;
+}
+
+.market-volume{
+
+    margin-top:6px;
+
+    color:#8892a6;
+
+    font-size:13px;
+
+}
+
+.market-green{
+    color:#22c55e;
+}
+
+.market-red{
+    color:#ef4444;
+}
+
+.status-badge{
+    background:#22c55e22;
+    color:#22c55e;
+    padding:4px 10px;
+    border-radius:20px;
+    font-size:12px;
+}
+
+.loading{
+    color:#8892a6;
+    padding:25px;
+    text-align:center;
+}
